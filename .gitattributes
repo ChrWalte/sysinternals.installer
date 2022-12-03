@@ -1,0 +1,3 @@
+
+# sh scripts need to be lf line endings
+*.sh eol=lf

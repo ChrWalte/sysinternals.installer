@@ -1,0 +1,12 @@
+# docker run command:
+# docker run -i -d --rm --name=sysinternals.installer --mount type=bind,source=C:/Users/chris/source/repos/sysinternals.installer/.docker.files/tools/,target=/bin/sysinternals.installer/Sysinternals/tools/ -e ENVIRONMENT=DEVELOPMENT chrwalte/sysinternals.installer:build
+
+services:
+  sysinternals.installer:
+    container_name: sysinternals.installer
+    hostname: sysinternals.installer
+    image: chrwalte/sysinternals.installer:build
+    environment:
+      ENVIRONMENT: "DEVELOPMENT"
+    volumes:
+      - ".docker-compose.files/tools/:/bin/sysinternals.installer/Sysinternals/tools/"

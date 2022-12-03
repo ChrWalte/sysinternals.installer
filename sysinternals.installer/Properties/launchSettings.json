@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "sysinternals.installer": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ENVIRONMENT": "DEVELOPMENT"
+      }
+    }
+  }
+}

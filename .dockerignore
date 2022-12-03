@@ -1,0 +1,29 @@
+
+# ignore visual studio files
+.vs/
+*/.bin/
+*/.obj/
+*.user/
+*/Properties/
+
+# ignore visual studio code files
+.vscode/
+
+# ignore other .ignore files
+.*ignore/
+
+# ignore scripts
+scripts/
+docker-compose.yml
+Dockerfile
+
+# ignore documentation files
+CHANGELOG.md/
+README.md/
+TODO.md/
+LICENSE/
+VERSION/
+
+# ignore container files
+.docker.files/
+.docker-compose.files/
