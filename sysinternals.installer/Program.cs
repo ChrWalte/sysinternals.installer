@@ -33,7 +33,10 @@ try
         await log.Information("performing sysinternals install...");
         var toolRepository = new ToolRepository(new List<string>(), log);
         var toolService = new ToolService(toolRepository, log);
-        var tools = await toolService.GetSysinternalsAsync();
+        var tools = await toolService.GetSysinternalsAsync(
+            config?.ForceToolsFromHttps ?? false,
+            config?.RetryCount ?? 5,
+            config?.RetryDelayInMilliseconds ?? 60000);
 
         // set up Sysinternals directory
         Directory.CreateDirectory(Path.Combine(".", sysinternalsDir, toolsDir));
@@ -87,7 +90,10 @@ try
         await log.Information("performing sysinternals update...");
         var toolRepository = new ToolRepository(config?.ToolsToIgnore, log);
         var toolService = new ToolService(toolRepository, log);
-        var tools = await toolService.GetSysinternalsAsync(config?.ForceToolsFromHttps ?? false);
+        var tools = await toolService.GetSysinternalsAsync(
+            config?.ForceToolsFromHttps ?? false,
+            config?.RetryCount ?? 5,
+            config?.RetryDelayInMilliseconds ?? 60000);
         var existingTools = await toolService.GetInstalledSysinternalsAsync(Path.Combine(".", toolsDir));
 
         // determine tools to install

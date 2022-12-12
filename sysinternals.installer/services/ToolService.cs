@@ -18,24 +18,41 @@ internal class ToolService : IToolService
         _log.Debug("initialized ToolService(...)").Wait();
     }
 
-    public async Task<List<Tool>> GetSysinternalsAsync(bool forceViaHttps = false)
+    public async Task<List<Tool>> GetSysinternalsAsync(
+        bool forceViaHttps = false,
+        int numberOfRetries = 5,
+        int millisecondsRetryWait = 60000)
     {
         await _log.Debug("entered GetSysinternalsAsync()");
 
         var tools = new List<Tool>();
-        if (!forceViaHttps && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        for (var i = 0; i < numberOfRetries; i++)
         {
-            await _log.Debug("current OS is Windows, getting tools from: _toolRepository.GetSysinternalsViaFtpAsync()");
-            tools = await _toolRepository.GetSysinternalsViaFtpAsync();
+            if (!forceViaHttps && RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                await _log.Debug(
+                    "current OS is Windows, getting tools from: _toolRepository.GetSysinternalsViaFtpAsync()");
+                tools = await _toolRepository.GetSysinternalsViaFtpAsync();
+            }
+
+            if (!tools.Any())
+            {
+                await _log.Debug("getting tools from: _toolRepository.GetSysinternalsViaHttpsAsync()");
+                tools = await _toolRepository.GetSysinternalsViaHttpsAsync();
+            }
+
+            if (!tools.Any())
+            {
+                await _log.Debug($"no tools were returned, will retry in {millisecondsRetryWait / 1000} seconds...");
+                Thread.Sleep(millisecondsRetryWait);
+                continue;
+            }
+
+            await _log.Debug("exited GetSysinternalsAsync() with tools");
+            return tools;
         }
 
-        if (!tools.Any())
-        {
-            await _log.Debug("getting tools from: _toolRepository.GetSysinternalsViaHttpsAsync()");
-            tools = await _toolRepository.GetSysinternalsViaHttpsAsync();
-        }
-
-        await _log.Debug("exited GetSysinternalsAsync()");
+        await _log.Debug("exited GetSysinternalsAsync() with no tools");
         return tools;
     }
 
