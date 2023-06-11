@@ -1,5 +1,9 @@
 # sysinternals.installer's changelog
 
+## Version 1.0.2
+
+- add self-contained build
+
 ## Version 1.0.1
 
 - added HTTP retry logic
